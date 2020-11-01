@@ -1,0 +1,374 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/*mystyle*/
+html,
+body {
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+    min-width: 550px;
+    min-width:550px;        /* Suppose you want minimum width of 1000px */
+    width: auto !important;  /* Firefox will set width as auto */
+    width:550px; 
+}
+
+.container {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 50px 50px 1fr 80px;
+    grid-template-areas: 'header'
+        'nav'
+        'main'
+        'footer';
+}
+
+.header {
+    grid-area: header;
+    background-image: linear-gradient(to right, #1DB954 50%, #341539);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.power {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 390px;
+    color: white;
+
+}
+
+.nav {
+    grid-area: nav;
+    background-color: darkkhaki;
+    display: flex;
+    align-items: stretch
+}
+
+.main {
+    grid-area: main;
+    background-color: #121212;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.main>div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-gap: 1vw;
+}
+
+.main .tiles {
+    padding: 1vw;
+}
+
+.main>div>div {
+    position: relative;
+}
+
+.main>div img {
+    width: 100%;
+}
+
+.main>div span {
+    left: 0;
+    right: 0;
+    bottom: 20%;
+    position: absolute;
+    color: white;
+    text-align: center;
+}
+
+.main>div>div>div {
+    color: white;
+    padding: 10px 0;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+:root {
+    --img-height: 100px;
+}
+
+.main>div.list {
+    display: block;
+    overflow-y: auto;
+}
+
+.main>div span.times {
+    top: 10px;
+    right: 35px;
+    left: unset;
+    font-size: 25px;
+    bottom: unset;
+    cursor: pointer;
+    padding: 5px;
+    display: block;
+}
+
+.main>div span.times:hover {
+    color: #1DB954;
+}
+
+.main>div.list>.list__item {
+
+    display: grid;
+    grid-template-columns: var(--img-height) 1fr 1fr 1fr 80px;
+    grid-gap: 0;
+    align-items: center;
+}
+
+.main>div.list>.list__item>div {
+    color: white;
+    font-size: 0.8rem;
+    padding: 10px 15px;
+}
+
+
+.main>div.list>div {
+    padding: 0 20px;
+}
+
+.footer {
+    grid-area: footer;
+    background-color: #040404;
+}
+
+.nav__link {
+    flex-grow: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: #040404;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    transition: background-color .2s ease-in-out;
+
+}
+
+.nav__link input {
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid white;
+    background-color: transparent;
+    padding: 4px;
+    width: 60%;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    font-family: 'Roboto';
+}
+
+.nav__link:hover {
+    flex-grow: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: #282828;
+}
+
+.tiles>div:hover {
+    cursor: pointer;
+}
+
+textarea {
+    outline: none;
+    resize: none;
+    font-size: 20px;
+    text-align: center;
+    line-height: 35px;
+    min-height: 265px;
+    background-color: #282828;
+    color: white;
+    font-family: cursive;
+    padding: 40px 10px;
+    border: none;
+    flex-grow: 1;
+}
+
+#lyricsBox {
+    width: 100%;
+    display: flex;
+    position: relative;
+}
+
+@media only screen and (max-width: 992px) {
+    .container {
+        grid-template-rows: 50px 1fr 80px 50px;
+        grid-template-areas: 'header'
+            'main'
+            'footer'
+            'nav';
+    }
+
+    .main>div.list>.list__item {
+        grid-template-columns: calc(var(--img-height) - 20px) 1fr;
+        grid-template-rows: auto;
+        column-gap: 0;
+        row-gap: 10px;
+
+    }
+
+    .main div.list img {
+        grid-row: span 2;
+        padding-right: 20px;
+    }
+
+    .mobile-hidden {
+        display: none;
+        visibility: hidden;
+    }
+
+    .main>div>div>div {
+        padding: 10px 20px;
+    }
+
+    .main>div.list>div {
+        padding: 0;
+    }
+
+}

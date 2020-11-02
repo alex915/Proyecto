@@ -52,6 +52,19 @@ async function getPlaylists() {
     const dataPromise = await axios(options);
     return dataPromise.data;
 }
+async function getTracksAudioFeatures(tracks_ids) {
+    let code = `${token_type} ${token}`;
+    let url = ` https://api.spotify.com/v1/audio-features?ids=${tracks_ids}`;
+    const options = {
+        method: 'GET',
+        headers: {
+            'Authorization': code
+        },
+        url,
+    };
+    const dataPromise = await axios(options);
+    return dataPromise.data;
+}
 //use
 async function getPlaylist(playlist_id) {
     let code = `${token_type} ${token}`;
@@ -260,7 +273,7 @@ function paintAlbums(data) {
     main.appendChild(div);
 }
 
-function paintTracks(data) {
+function paintTracks(data, x) {
     const main = document.querySelector('.main');
     main.innerHTML = '';
     let div = document.createElement('DIV');
@@ -272,29 +285,45 @@ function paintTracks(data) {
         let artist = document.createElement('DIV');
         let album = document.createElement('DIV');
         let duration = document.createElement('DIV');
+        let stats = document.createElement('DIV');
+
         img.setAttribute('src', data[index].track.album.images[0].url);
         divTrack.addEventListener('click', () => {
             listenSong(data[index].track.id);
             paintSelectedTrack(divTrack);
         });
+        album.addEventListener('click', () => {
+            showAlbumTracks(data[index].track.album.id);
+        });
+        if (+x.audio_features[index].energy > 0.8) {
+            stats.insertAdjacentHTML("afterbegin", '<i class="fas fa-fire-alt tooltip" tooltip" aria-hidden="true" style="padding-right: 5px;"><span class="tooltiptext">Energía</span></i>');
+        }
+        if (+x.audio_features[index].valence > 0.8) {
+            stats.insertAdjacentHTML("afterbegin", '<i class="fas fa-medal tooltip" aria-hidden="true" style="padding-right: 5px;"><span class="tooltiptext">Éxito</span></i>');
+        }
+        if (+x.audio_features[index].danceability > 0.8) {
+            stats.insertAdjacentHTML("afterbegin", '<i class="fas fa-glass-cheers tooltip" aria-hidden="true" style="padding-right: 5px;"><span class="tooltiptext">Bailable</span></i>');
+        }
         title.innerText = data[index].track.name;
-        album.innerHTML = `<a onclick="showAlbumTracks(${data[index].track.album.id})">${ data[index].track.album.name}</a>`;;
+        album.innerText = data[index].track.album.name;
         artist.innerText = data[index].track.artists.map(x => x.name).join(", ");
         duration.innerText = durationFormatter(data[index].track.duration_ms);
-        album.setAttribute('class', 'mobile-hidden');
+        album.setAttribute('class', 'remarkable');
+        stats.style.display = 'flex';
         divTrack.setAttribute('class', 'list__item');
         duration.setAttribute('class', 'mobile-hidden');
         divTrack.appendChild(img);
         divTrack.appendChild(title);
         divTrack.appendChild(artist);
         divTrack.appendChild(album);
+        divTrack.appendChild(stats);
         divTrack.appendChild(duration);
         div.appendChild(divTrack);
     }
     main.appendChild(div);
 }
 
-function paintTracksAlbums(data, album) {
+function paintTracksAlbums(data, album, x) {
     const main = document.querySelector('.main');
     main.innerHTML = '';
     let albumHeader = document.createElement('DIV');
@@ -312,11 +341,21 @@ function paintTracksAlbums(data, album) {
         let divTrack = document.createElement('DIV');
         let title = document.createElement('DIV');
         let artist = document.createElement('DIV');
+        let stats = document.createElement('DIV');
         let duration = document.createElement('DIV');
         divTrack.addEventListener('click', () => {
             listenSong(data[index].id);
             paintSelectedTrack(divTrack);
         });
+        if (+x.audio_features[index].energy > 0.8) {
+            stats.insertAdjacentHTML("afterbegin", '<i class="fas fa-fire-alt tooltip" tooltip" aria-hidden="true" style="padding-right: 5px;"><span class="tooltiptext">Energía</span></i>');
+        }
+        if (+x.audio_features[index].valence > 0.8) {
+            stats.insertAdjacentHTML("afterbegin", '<i class="fas fa-medal tooltip" aria-hidden="true" style="padding-right: 5px;"><span class="tooltiptext">Éxito</span></i>');
+        }
+        if (+x.audio_features[index].danceability > 0.8) {
+            stats.insertAdjacentHTML("afterbegin", '<i class="fas fa-glass-cheers tooltip" aria-hidden="true" style="padding-right: 5px;"><span class="tooltiptext">Bailable</span></i>');
+        }
         title.innerText = data[index].name;
         artist.innerText = data[index].artists.map(x => x.name).join(", ");
         duration.innerText = durationFormatter(data[index].duration_ms);
@@ -324,6 +363,7 @@ function paintTracksAlbums(data, album) {
         duration.setAttribute('class', 'mobile-hidden');
         divTrack.appendChild(title);
         divTrack.appendChild(artist);
+        divTrack.appendChild(stats);
         divTrack.appendChild(duration);
         div.appendChild(divTrack);
     }
@@ -348,11 +388,15 @@ function paintTracksSearch(data) {
             listenSong(data[index].id);
             paintSelectedTrack(divTrack);
         });
+        album.addEventListener('click', () => {
+            showAlbumTracks(data[index].album.id);
+        });
+
+        album.innerText = data[index].album.name;
         title.innerText = data[index].name;
-        album.innerHTML = `<a onclick="showAlbumTracks(${data[index].album.id})">${data[index].album.name}</a>`;
         artist.innerText = data[index].artists.map(x => x.name).join(", ");
         duration.innerText = durationFormatter(data[index].duration_ms);
-        album.setAttribute('class', 'mobile-hidden');
+        album.setAttribute('class', 'remarkable');
         divTrack.setAttribute('class', 'list__item');
         duration.setAttribute('class', 'mobile-hidden');
         divTrack.appendChild(img);
@@ -368,23 +412,36 @@ function paintTracksSearch(data) {
 function paintSelectedTrack(divTrack) {
     document.querySelectorAll('.main .list div.list__item').forEach(x => x.classList.remove('selectedItem'));
     let icon = document.getElementById('play');
-    console.log(icon);
-    if (icon!=null) {
+    if (icon != null) {
         icon.remove();
-    } 
+    }
     divTrack.classList.add('selectedItem');
     divTrack.children[0].insertAdjacentHTML("afterbegin", '<i class="fas fa-play" id="play" aria-hidden="true" style="padding-right: 9px;"></i>');
 }
 
+function show() {
+    let spinner = document.querySelector('.spinner');
+    spinner.classList.add('show');
+}
+
+function unShow() {
+    setTimeout(()=>{
+        let spinner = document.querySelector('.spinner');
+        spinner.classList.remove('show');
+    }, 800);
+}
+
 //EVENTS
 function listenSong(id_track) {
+    show();
     let iframe = document.querySelector('footer > iframe');
     iframe.src = `https://open.spotify.com/embed/track/${id_track}`;
     getTrack(id_track).then(x => {
         var s = document.createElement("script");
         s.src = `https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?format=jsonp&callback=generateLyrics&track_isrc=${x.external_ids.isrc}&apikey=985dd2d2c4519de96b536b418188dfb4`;
         document.querySelector('body').appendChild(s);
-    });
+        unShow();
+    }).catch(() => unShow());
     let lyricBox = document.getElementById("lyricsBox");
     if (lyricBox != undefined) {
         lyricBox.remove();
@@ -392,9 +449,11 @@ function listenSong(id_track) {
     let lyrics = document.createElement("DIV");
     lyrics.setAttribute('id', "lyricsBox");
     document.querySelector('main.main').appendChild(lyrics);
+ 
 }
 
 function generateLyrics(x) {
+   
     let box = document.querySelector('#lyricsBox');
     box.innerHTML = '';
     if (x.message.body.lyrics != undefined) {
@@ -405,6 +464,7 @@ function generateLyrics(x) {
         box.innerHTML = `<span class="times" onclick="removeLyrics()">&times;</span>
         <textarea disabled>No hay letra que mostrar =(</textarea>`;
     }
+
 }
 
 function removeLyrics() {
@@ -418,48 +478,75 @@ function removeSearch() {
 }
 
 function search() {
-
+    show();
     let search = document.querySelector(".nav > .nav__link > input").value;
     if (search != null || search != undefined || search != '') {
-        searchResult(search).then(x => paintTracksSearch(x.tracks.items));
+        searchResult(search).then(x => {
+            paintTracksSearch(x.tracks.items);
+            unShow();
+        }).catch(() => unShow());
     }
 }
 
 function showAlbumTracks(album_id) {
+    show();
     getAlbum(album_id).then(album => {
         getAlbumTracks(album_id).then(data => {
-            paintTracksAlbums(data.items, album);
+            let ids = data.items.map(x => x.id).join(",");
+            getTracksAudioFeatures(ids).then(
+                x => {
+                    paintTracksAlbums(data.items, album, x);
+                    unShow()
+                }).catch(() => unShow())
         });
     });
 }
 
 function showCategory(category_id) {
+    show();
     getCategoriesPlaylist(category_id).then(data => {
         paintPlaylists(data.playlists.items);
-    });
+        unShow();
+    }).catch(() => unShow());
 
 }
 
 function showTracks(playlist_id) {
+    show()
     getPlaylistTrack(playlist_id).then(data => {
-        paintTracks(data.items)
+        let ids = data.items.map(x => x.track.id).join(',');
+        getTracksAudioFeatures(ids).then(
+            x => {
+                paintTracks(data.items, x);
+                unShow()
+            }
+        ).catch(() => unShow());
     });
 
 }
 
 function getDataNews() {
-    getNewReleases().then(x => paintAlbums(x.albums.items));
+    show();
+    getNewReleases().then(x => {
+        paintAlbums(x.albums.items);
+        unShow()
+    }).catch(() => unShow());
 }
 
 function getDataPlaylists() {
-    getPlaylists().then(data =>
-        paintPlaylists(data.playlists.items));
+    show();
+    getPlaylists().then(data => {
+        paintPlaylists(data.playlists.items);
+        unShow();
+    }).catch(() => unShow());
 }
 
 function getDataCategories() {
+    show();
     getCategories().then(data => {
-        paintCategories(data.categories.items)
-    })
+        paintCategories(data.categories.items);
+        unShow();
+    }).catch(() => unShow())
 }
 
 //UTILS

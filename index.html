@@ -13,6 +13,24 @@
 </head>
 
 <body onload="getToken()">
+    <div class="spinner">
+        <div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
+
+
+    </div>
     <div class="container">
         <header class="header">
 
@@ -21,13 +39,17 @@
                 <span style="color: #000;">Sing</span><span style="color: white;">Star</span>
             </div>
             <div class="power">
-                <img src="logos/Spotify_Logo_RGB_White.png" width="80px" style="padding: 0 10px;"/><i class="far fa-heart"></i>
-                <img src="logos/logo-dev-musixmatch.png" width="130px"  style="padding: 0 10px;" /></div>
+                <img src="logos/Spotify_Logo_RGB_White.png" width="80px" style="padding: 0 10px;" /><i
+                    class="far fa-heart"></i>
+                <img src="logos/logo-dev-musixmatch.png" width="130px" style="padding: 0 10px;" /></div>
         </header>
         <nav class="nav">
-            <a onclick="getDataNews(),removeSearch()" class="nav__link"><i style="padding: 0 10px;" class="fas fa-compact-disc"></i>Novedades</a>
-            <a onclick="getDataCategories(),removeSearch()" class="nav__link"><i style="padding: 0 10px;" class="fas fa-music"></i>Categorias</a>
-            <a onclick="getDataPlaylists(),removeSearch()" class="nav__link"><i style="padding: 0 10px;" class="fas fa-stream"></i>Playlists</a>
+            <a onclick="getDataNews(),removeSearch()" class="nav__link"><i style="padding: 0 10px;"
+                    class="fas fa-compact-disc"></i>Novedades</a>
+            <a onclick="getDataCategories(),removeSearch()" class="nav__link"><i style="padding: 0 10px;"
+                    class="fas fa-music"></i>Categorias</a>
+            <a onclick="getDataPlaylists(),removeSearch()" class="nav__link"><i style="padding: 0 10px;"
+                    class="fas fa-stream"></i>Playlists</a>
             <label class="nav__link" for="search">
                 <i class="fas fa-search" style="padding: 0 8px;"></i> <input id="search" type="text" onkeyup="search()"
                     placeholder="Busca canciones, artistas..." />

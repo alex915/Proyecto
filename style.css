@@ -141,9 +141,11 @@ body {
     font-family: 'Roboto', sans-serif;
     overflow: hidden;
     min-width: 550px;
-    min-width:550px;        /* Suppose you want minimum width of 1000px */
-    width: auto !important;  /* Firefox will set width as auto */
-    width:550px; 
+    min-width: 550px;
+    /* Suppose you want minimum width of 1000px */
+    width: auto !important;
+    /* Firefox will set width as auto */
+    width: 550px;
 }
 
 .container {
@@ -173,7 +175,7 @@ body {
 .power {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-end;
     width: 390px;
     color: white;
 
@@ -181,7 +183,6 @@ body {
 
 .nav {
     grid-area: nav;
-    background-color: darkkhaki;
     display: flex;
     align-items: stretch
 }
@@ -236,6 +237,7 @@ body {
 .main>div.list {
     display: block;
     overflow-y: auto;
+    height: 100%;
 }
 
 .main>div span.times {
@@ -250,6 +252,7 @@ body {
 }
 
 .main>div span.times:hover {
+    transition: color .2s ease-in-out;
     color: #1DB954;
 }
 
@@ -281,7 +284,7 @@ body {
     flex-grow: 1;
     text-align: center;
     cursor: pointer;
-    background-color: #040404;
+    background-color: #000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -291,6 +294,37 @@ body {
 
 }
 
+.title__header {
+    color: white;
+    top: 50px;
+    left: 40px;
+    bottom: unset;
+    right: unset;
+    font-size: 30px;
+}
+
+.album__header>img {
+
+    width: 50%;
+    top: 100px;
+    position: relative;
+    left: 25%;
+}
+
+.album__header {
+
+    height: 120px;
+}
+
+.main>div.list>.list__item__album {
+    grid-template-columns: 1fr 1fr 80px;
+    width: 50%
+}
+
+.main>div.album__header>img {
+    width: 50%;
+}
+
 .nav__link input {
     border: none;
     border-radius: 0;
@@ -298,10 +332,12 @@ body {
     background-color: transparent;
     padding: 4px;
     width: 60%;
-    text-align: center;
+    text-align: start;
     color: white;
     font-size: 14px;
     font-family: 'Roboto';
+    outline: #000 auto 0px;
+
 }
 
 .nav__link:hover {
@@ -325,15 +361,29 @@ textarea {
     background-color: #282828;
     color: white;
     font-family: cursive;
-    padding: 40px 10px;
+    padding: 50px 10px 0;
     border: none;
     flex-grow: 1;
+    cursor: text;
+    
 }
 
 #lyricsBox {
     width: 100%;
     display: flex;
     position: relative;
+    height: 100%;
+}
+
+.main>div.list>.list__item:hover {
+    background-color: #5a5a5a;
+    cursor: pointer;
+    transition: background-color .2s ease-in-out;
+
+}
+
+.selectedItem{
+    background-color: #5a5a5a;
 }
 
 @media only screen and (max-width: 992px) {
@@ -345,12 +395,30 @@ textarea {
             'nav';
     }
 
+    .nav__link input {
+        width: 75%;
+
+    }
+
     .main>div.list>.list__item {
         grid-template-columns: calc(var(--img-height) - 20px) 1fr;
         grid-template-rows: auto;
         column-gap: 0;
-        row-gap: 10px;
+        padding: 10px 0;
+        border-top: 1px solid #5a5a5a;
+        border-bottom: 1px solid #5a5a5a;
+        padding-left: 15px;
+    }
 
+    .main>div.list>.list__item__album {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+
+    }
+
+    .main>div.list>.list__item__album>div:nth-child(2) {
+
+        font-weight: 200;
     }
 
     .main div.list img {
